@@ -153,22 +153,14 @@ async function sendMessage(overrideMessage = null) {
       history:          State.chatHistory.slice(-8),
     };
 
-   const response = await fetch("https://your-backend.onrender.com/api/chat", {
-    method: "POST",
-    headers: {
-        "Content-Type": "application/json"
-    },
-    body: JSON.stringify(data)
-});
+    const res  = await fetch("/api/chat", {
+      method:  "POST",
+      headers: { "Content-Type": "application/json" },
+      body:    JSON.stringify(body),
+    });
 
-if (!response.ok) {
-    const text = await response.text();
-    console.error(text);
-    throw new Error(`HTTP ${response.status}`);
-}
+    const data = await res.json();
 
-const result = await response.json();
-    
     if (data.error) throw new Error(data.error);
 
     const reply = data.response || "Sorry, I couldn't generate a response.";
